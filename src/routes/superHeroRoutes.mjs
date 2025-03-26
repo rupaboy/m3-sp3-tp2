@@ -55,91 +55,62 @@ const router = express.Router();
 //GET
 //Collection
 
-router.get('/heroes',[
-//Validar parámetros ''
-//param('')    
-], obtenerTodosLosSuperheroesController);
+router.get('/heroes', obtenerTodosLosSuperheroesController);
 
-
-
-
-router.get('/heroes/id',[
-//Validar parámetros ''
-//param('')    
-], obtenerTodosLosSuperheroesPorIdController);
-
+router.get('/heroes/id', obtenerTodosLosSuperheroesPorIdController);
 
 router.get('/heroes/id/:atributo/:valor',
-    atributeParamsSanitizer(),
     lowLevelSanitizer(),
-    lowLevelStringValidations(),
+    atributeParamsSanitizer(),
+    validationHandler,
     buscarIdSuperheroesPorAtributoController)
 
+router.get('/heroes/mas-poderosos/', obtenerSuperheroesMasPoderososController);
 
-router.get('/heroes/mas-poderosos/',[
-//Validar parámetros ''
-//param('')    
-], obtenerSuperheroesMasPoderososController);
-
-
-
-
-router.get('/heroes/mas-poderosos/:planeta',[
-//Validar parámetros ''
-//param('')    
-], obtenerSuperheroesMasPoderososPlanetaController);
+router.get('/heroes/mas-poderosos/:valor',
+    lowLevelSanitizer(),
+    lowLevelStringValidations(),
+    validationHandler,
+    obtenerSuperheroesMasPoderososPlanetaController);
 
 
+router.get('/heroes/menos-poderosos/',
+    obtenerSuperheroesMenosPoderososController);
 
 
-router.get('/heroes/menos-poderosos/',[
-//Validar parámetros ''
-//param('')    
-], obtenerSuperheroesMenosPoderososController);
+router.get('/heroes/menos-poderosos/:valor',
+    lowLevelSanitizer(),
+    lowLevelStringValidations(),
+    validationHandler,
+    obtenerSuperheroesMenosPoderososPlanetaController);
 
 
+router.get('/heroes/sin-poderes/',
+    obtenerSuperheroesSinPoderesController);
 
 
-router.get('/heroes/menos-poderosos/:planeta',[
-//Validar parámetros ''
-//param('')    
-], obtenerSuperheroesMenosPoderososPlanetaController);
-
-
-
-
-router.get('/heroes/sin-poderes/',[
-//Validar parámetros ''
-//param('')    
-], obtenerSuperheroesSinPoderesController);
-
-
-
-
-router.get('/heroes/sin-poderes/:planeta',[
-//Validar parámetros ''
-//param('')    
-], obtenerSuperheroesSinPoderesPlanetaController);
-
-
+router.get('/heroes/sin-poderes/:valor',
+    lowLevelSanitizer(),
+    lowLevelStringValidations(),
+    validationHandler,
+    obtenerSuperheroesSinPoderesPlanetaController);
 
 
 router.get('/heroes/:atributo/:valor',
-atributeParamsSanitizer(),
-lowLevelSanitizer(),
-lowLevelStringValidations(),
-buscarSuperheroesPorAtributoController);
+    lowLevelSanitizer(),
+    atributeParamsSanitizer(),
+    validationHandler,
+    buscarSuperheroesPorAtributoController)
 
 
 
-router.get('/heroes/:id',[
-//Validar parámetros ''
-//param('')    
-], obtenerSuperheroePorIdController);
+router.get('/heroes/:id',
+    lowLevelSanitizer(),
+    lowLevelStringValidations(),
+    validationHandler,
+    obtenerSuperheroePorIdController);
 
 //POST
-
-
 
 
 router.post('/heroes/nuevo/template',[
@@ -148,39 +119,18 @@ router.post('/heroes/nuevo/template',[
 ], agregarNuevoTemplateSuperheroeController) //Template ../helper/templateHeroeNuevo.mjs
 
 
-
-
 router.post('/heroes/nuevo/array',[
 //Validar parámetros ''
 //param('')    
 ], agregarNuevoArraySuperheroesController) //Array ../helper/templateHeroeNuevo.mjs
 
 
-
-
-//router.post('/heroes/nuevo',[
-//Validar parámetros ''
-//// param('')// ], agregarNuevoSuperheroeController)
-
 //PUT
-
-
-
-
-//router.put('/heroes/:id/:atributo/:valor', (req, res) => {
-////Validar parámetros ''
-//const { id , valorr } = req.params 
-////param('')    
-//    //putAtributoValor
-//, editarSuperheroePorIdAtributoValorController}) //.../_id/edad/numero de años...
-////Arrays
-//
 
 router.put('heroes/:id/:atributo/:valor', (req, res) => {
     const { id, atributo, valor } = req.params
 //        putValorValidation(id, atributo, valor),
         editarSuperheroePorIdAtributoValorController})
-
 
 
 router.put('/heroes/:id/agregar/poder/:poder', (req, res) => {
@@ -190,13 +140,10 @@ router.put('/heroes/:id/agregar/poder/:poder', (req, res) => {
         editarSuperheroePorIdAgregarPoderController})
 
 
-
 router.put('/heroes/:id/quitar/poder/:poder',[
 //Validar parámetros ''
 //param('')    
 ], editarSuperheroePorIdQuitarPoderController)
-
-
 
 
 router.put('/heroes/:id/agregar/aliado/:aliado',[
@@ -205,14 +152,10 @@ router.put('/heroes/:id/agregar/aliado/:aliado',[
 ], editarSuperheroePorIdAgregarAliadoController)
 
 
-
-
 router.put('/heroes/:id/quitar/aliado/:aliado',[
 //Validar parámetros ''
 //param('')    
 ], editarSuperheroePorIdQuitarAliadoController)
-
-
 
 
 router.put('/heroes/:id/agregar/enemigo/:enemigo',[
@@ -221,31 +164,24 @@ router.put('/heroes/:id/agregar/enemigo/:enemigo',[
 ], editarSuperheroePorIdAgregarEnemigoController)
 
 
-
-
 router.put('/heroes/:id/quitar/enemigo/:enemigo',[
 //Validar parámetros ''
 //param('')    
 ], editarSuperheroePorIdQuitarEnemigoController)
 
 
-
-
 //router.put('/heroes/editar/:id',[
 //Validar parámetros ''
 //// param('')// ], editarSuperheroePorIdController) //..Pasa un id para editar. Deprecated.
 
+
+
 //DELETE
-
-
-
 
 router.delete('/heroes/borrar/id/:id',[
 //Validar parámetros ''
 //param('')    
 ], borrarSuperheroePorIdController)
-
-
 
 
 router.delete('/heroes/borrar/nombre/:nombre',[

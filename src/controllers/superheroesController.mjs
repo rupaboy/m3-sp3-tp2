@@ -130,8 +130,8 @@ export async function obtenerSuperheroesMasPoderososController(req, res) {
 
 export async function obtenerSuperheroesMasPoderososPlanetaController(req, res) {
     try {
-        const {planeta} = req.params;
-        const superheroes = await obtenerSuperheroesMasPoderososPlaneta(planeta);
+        const {valor} = req.params;
+        const superheroes = await obtenerSuperheroesMasPoderososPlaneta(valor);
         if (superheroes.length === 0) {
             return res.status(404).send(
                 { mensaje: 'No se encontró a los superhéroes más poderosos de ese planeta.' });
@@ -164,8 +164,8 @@ export async function obtenerSuperheroesMenosPoderososController(req, res) {
 
 export async function obtenerSuperheroesMenosPoderososPlanetaController(req, res) {
     try {
-        const {planeta} = req.params;
-        const superheroes = await obtenerSuperheroesMenosPoderososPlaneta(planeta);
+        const {valor} = req.params;
+        const superheroes = await obtenerSuperheroesMenosPoderososPlaneta(valor);
         if (superheroes.length === 0) {
             return res.status(404).send(
                 { mensaje: 'No se encontró a los superhéroes menos poderosos de ese planeta.' });
@@ -198,8 +198,8 @@ export async function obtenerSuperheroesSinPoderesController(req, res) {
 
 export async function obtenerSuperheroesSinPoderesPlanetaController(req, res) {
     try {
-        const {planeta} = req.params;
-        const superheroes = await obtenerSuperheroesSinPoderesPlaneta(planeta);
+        const {valor} = req.params;
+        const superheroes = await obtenerSuperheroesSinPoderesPlaneta(valor);
         if (superheroes.length === 0) {
             return res.status(404).send(
                 { mensaje: 'No se encontró a los superhéroes sin poderes de ese planeta.' });

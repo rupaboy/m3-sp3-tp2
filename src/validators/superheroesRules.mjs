@@ -1,4 +1,4 @@
-import { param, body, check } from 'express-validator'
+import {param, body} from 'express-validator'
 
 export const lowLevelStringValidations = () => [
 
@@ -7,15 +7,15 @@ export const lowLevelStringValidations = () => [
     // El largo deberá ser >3 && <60
     // Sanitiza espacios alrededor de la string.
 
-    check('valor')
+    param('valor')
     .exists().withMessage(
         `El nombre es obligatorio.`)
     .notEmpty().withMessage(
         `El nombre no puede expresarse como una cadena vacía de texto.`) //OK
+    .trim()
     .isLength({min: 3, max: 60}).withMessage(
         `El nombre debe tener entre 3 y 60 caractéres`) //OK
-    .trim().withMessage(
-        `No se pueden agregar espacios vacíos antes o después del nombre.`), //OK
+
 ]
 
 
@@ -26,7 +26,7 @@ export const midLevelStringValidations = () => [
     // Sólo letras inicio y final.
     // 2/1 (''-) / (--') MAX
 
-    check('valor')
+    param('valor')
     .matches(/^[a-zA-ZáéíóúÁÉÍÓÚñÑ0-9' -]+$/).withMessage(
         `Sólo se permiten letras, números, espacios, apóstrofes (') y guiones medios (-) en el nombre.`) //OK
     .matches(/^(?!.*['-].*['-].*['-].*['-]).*$/).withMessage(
@@ -37,7 +37,7 @@ export const midLevelStringValidations = () => [
 
 export const highLevelStringValidations = () => [
     
-    check('valor')
+    param('valor')
     
     //Sólo admite caractéres alfabéticos
     //Sólo admite minúsculas
@@ -54,7 +54,7 @@ export const highLevelStringValidations = () => [
 
 export const lowLevelSanitizer = () => [
     
-    check('valor')
+    param('valor')
     .customSanitizer(value => {
 
         const palabras = value //Limpia la repeticion de guiones, apostrofes y espacios
@@ -70,7 +70,7 @@ export const lowLevelSanitizer = () => [
 
 export const midLevelSanitizer = () => [
     
-    check('valor')
+    param('valor')
     .customSanitizer(value => {
 
     const palabras = value 
@@ -85,7 +85,7 @@ export const midLevelSanitizer = () => [
 
 export const highLevelSanitizer = () => [
     
-    check('valor')
+    param('valor')
     .customSanitizer(value => {
 
         const articulos = new Set([ 'de', 'del', 'el', 'la', 'los', 'las', 'un', 'una', 'unos', 'unas', 'al', 'a', 'ante', 'bajo', 'con', 'contra', 'desde', 'en', 'entre', 'hacia', 'hasta', 'para', 'por', 'según', 'sobre', 'tras', 'y', 'o', 'ni', 'que', 'pero', 'aunque', 'porque', 'pues', 'como', 'cuando', 'donde', 'mientras', 'aunque' ]);
@@ -112,9 +112,9 @@ export const highLevelSanitizer = () => [
 
 
 
-export const atributeParamsSanitizer = (atributo) => [
+export const atributeParamsSanitizer = () => [
     
-    check('atributo')
+    param('atributo')
     .customSanitizer(atributo => {
 
         const atributoLowCase = atributo.toLowerCase();
