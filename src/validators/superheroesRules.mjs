@@ -1,5 +1,132 @@
 import {param, body} from 'express-validator'
 
+
+// ATRIBUTO __________________________________________________ SANITIZER
+export const atributeParamsSanitizer = () => [
+    
+    param('atributo')
+    .customSanitizer(atributo => {
+
+        const atributoLowCase = atributo.toLowerCase();
+        
+        switch (atributoLowCase) {
+            case 'nombresuperheroe': return 'nombreSuperHeroe'
+            case 'nombrereal': return 'nombreReal' 
+            case 'planetaorigen': return 'planetaOrigen' 
+            default: return atributo
+        };
+    })
+];
+
+export const byAttributeValidations = () => [
+
+    param('valor')
+    .customSanitizer(atributo => {
+
+        const atributoLowCase = atributo.toLowerCase();
+        
+        switch (atributoLowCase) {
+
+            case 'nombresuperheroe':
+            case 'nombrereal':
+            case 'planetaorigen':
+            case 'debilidad' : {
+                highLevelStringSanitizer();
+                lowLevelStringValidations();
+                midLevelStringValidations();
+                break;
+            }
+
+            case 'edad': {
+                lowLevelNumberValidations();
+                break;
+            }
+
+            case 'poderes':
+            case 'aliados':
+            case 'enemigos': { 
+                lowLevelArrayValidations()
+                break;
+            }
+
+            default: return atributo
+
+        };
+    })
+];    
+
+
+
+// STRING __________________________________________________ SANITIZER
+export const lowLevelStringSanitizer = () => [
+    
+    param('valor')
+    .customSanitizer(value => {
+
+        const palabras = value //Limpia la repeticion de guiones, apostrofes y espacios
+            .replace(/\s*-\s*/g, '-')
+            .replace(/\s+/g, ' ')
+            .replace(/-+/g, '-')
+            .replace(/'+/g, "'")
+
+            return palabras
+    })
+];
+
+
+export const midLevelStringSanitizer = () => [
+    
+    param('valor')
+    .customSanitizer(value => {
+
+        const palabras = value
+            .replace(/\s*-\s*/g, '-')
+            .replace(/\s+/g, ' ')
+            .replace(/-+/g, '-')
+            .replace(/'+/g, "'")
+                .replace(/['\s]*-\s*['\s]*/g, '-')  // Elimina los apóstrofes y espacios alrededor del guion
+                .replace(/[-'](.)/g, (match, p1) => match[0] + p1.toUpperCase())  // Pone en mayúscula la letra después del guion
+                .replace(/^([a-z])/g, (match, p1) => p1.toUpperCase()) // Convierte la primera letra de la frase a mayúscula
+
+            return palabras
+        })
+] 
+
+
+export const highLevelStringSanitizer = () => [
+    
+    param('valor')
+    .customSanitizer(value => {
+
+        const articulos = new Set([ 'de', 'del', 'el', 'la', 'los', 'las', 'un', 'una', 'unos', 'unas', 'al', 'a', 'ante', 'bajo', 'con', 'contra', 'desde', 'en', 'entre', 'hacia', 'hasta', 'para', 'por', 'según', 'sobre', 'tras', 'y', 'o', 'ni', 'que', 'pero', 'aunque', 'porque', 'pues', 'como', 'cuando', 'donde', 'mientras', 'aunque' ]);
+
+        const palabrasSeparadas = palabras.split(/([ ']+)/)
+
+        let nuevaFrase = []  //Reconstruye el String poniendo en mayúsculas la primera letra excepto articulos.
+
+            palabrasSeparadas.forEach((palabra, index) => {
+                if (index === 0 || !articulos.has(palabra)) {
+                    const nuevaPalabra = palabra.charAt(0).toUpperCase() + palabra.slice(1); //Que sea mayus
+                    nuevaFrase.push(nuevaPalabra)
+                } else {
+                nuevaFrase.push(palabra) //que sea minus
+            }
+        });
+
+        return nuevaFrase.join('')
+            .replace(/\s*-\s*/g, '-')
+            .replace(/\s+/g, ' ')
+            .replace(/-+/g, '-')
+            .replace(/'+/g, "'")
+                .replace(/['\s]*-\s*['\s]*/g, '-')  // Elimina los apóstrofes y espacios alrededor del guion
+                .replace(/[-'](.)/g, (match, p1) => match[0] + p1.toUpperCase())  // Pone en mayúscula la letra después del guion
+                .replace(/^([a-z])/g, (match, p1) => p1.toUpperCase()); // Convierte la primera letra de la frase a mayúscula
+        })
+] 
+
+
+
+// STRING __________________________________________________ VALIDATION
 export const lowLevelStringValidations = () => [
 
     // ¡La string debe existir!
@@ -52,97 +179,40 @@ export const highLevelStringValidations = () => [
       })
 ]
 
-export const lowLevelSanitizer = () => [
-    
+
+// NUMBER __________________________________________________ VALIDATION
+
+export const lowLevelNumberValidations = () => {
     param('valor')
-    .customSanitizer(value => {
+    .exists().withMessage(
+        `El número es obligatorio.`)
+    .trim()
+    .notEmpty().withMessage(
+        `El número no puede expresarse como un valor vacío.`)
 
-        const palabras = value //Limpia la repeticion de guiones, apostrofes y espacios
-            .replace(/\s*-\s*/g, '-')
-            .replace(/\s+/g, ' ')
-            .replace(/-+/g, '-')
-            .replace(/'+/g, "'")
-
-            return palabras
-    })
-];
-
-
-export const midLevelSanitizer = () => [
-    
-    param('valor')
-    .customSanitizer(value => {
-
-    const palabras = value 
-            .replace(/['\s]*-\s*['\s]*/g, '-')  // Elimina los apóstrofes y espacios alrededor del guion
-            .replace(/[-'](.)/g, (match, p1) => match[0] + p1.toUpperCase())  // Pone en mayúscula la letra después del guion
-            .replace(/^([a-z])/g, (match, p1) => p1.toUpperCase()); // Convierte la primera letra de la frase a mayúscula
-
-            return palabras
-        })
-] 
-
-
-export const highLevelSanitizer = () => [
-    
-    param('valor')
-    .customSanitizer(value => {
-
-        const articulos = new Set([ 'de', 'del', 'el', 'la', 'los', 'las', 'un', 'una', 'unos', 'unas', 'al', 'a', 'ante', 'bajo', 'con', 'contra', 'desde', 'en', 'entre', 'hacia', 'hasta', 'para', 'por', 'según', 'sobre', 'tras', 'y', 'o', 'ni', 'que', 'pero', 'aunque', 'porque', 'pues', 'como', 'cuando', 'donde', 'mientras', 'aunque' ]);
-
-        const palabrasSeparadas = palabras.split(/([ ']+)/)
-
-        let nuevaFrase = []
-
-        palabrasSeparadas.forEach((palabra, index) => {
-            if (index === 0 || !articulos.has(palabra)) {
-                const nuevaPalabra = palabra.charAt(0).toUpperCase() + palabra.slice(1);
-                nuevaFrase.push(nuevaPalabra)
-            } else {
-            nuevaFrase.push(palabra) }
-
-        });
-
-        return nuevaFrase.join('')
-            .replace(/['\s]*-\s*['\s]*/g, '-')  // Elimina los apóstrofes y espacios alrededor del guion
-            .replace(/[-'](.)/g, (match, p1) => match[0] + p1.toUpperCase())  // Pone en mayúscula la letra después del guion
-            .replace(/^([a-z])/g, (match, p1) => p1.toUpperCase()); // Convierte la primera letra de la frase a mayúscula
-        })
-] 
-
-
-
-export const atributeParamsSanitizer = () => [
-    
-    param('atributo')
-    .customSanitizer(atributo => {
-
-        const atributoLowCase = atributo.toLowerCase();
+    .isLength({min: 3, max: 60}).withMessage(
+        `El número debe tener entre 3 y 60 caractéres`)
         
-        switch (atributoLowCase) {
-            case 'nombresuperheroe': return 'nombreSuperHeroe' 
-            case 'nombrereal': return 'nombreReal' 
-            case 'planetaorigen': return 'planetaOrigen' 
-            default: return atributo 
-        };
-    })
-];
+    .isFloat({ min: 0 }).withMessage(
+        `El número debe ser mayor o igual a 0.`
+)
+};
 
-/*
-export const validatorParams = (req, res, next) => {
-    
-    //Si hay errores de validación...
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-        return res.status(400).json({ errores: errors.array() });
-        
+
+//ARRAY _____________________________________________________ VALIDATION
+
+
+export const lowLevelArrayValidations = () => {
+        param('valor')
+        .exists().withMessage(
+            `El vector es obligatorio.`)
+
+        .isArray().withMessage(
+            `Debe ser un vector.`)
+
+        .custom((value) => {
+            if (!value.every(i => typeof i === 'string')) {
+                throw new Error(`Todos los elementos del vector. deben ser cadenas de texto.`)
+            } return true;
+        })
     }
-
-//Si son válidos
-const {id, valor} = req. params;
-res.json({
-    mensaje: 'Parametros válidos',
-    id,
-    valor
-})};
-*/

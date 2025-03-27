@@ -2,7 +2,7 @@
 
 import express from 'express';
 
-    //Validator
+    //Validators
 import { validationResult } from 'express-validator';
 import { validationHandler } from '../validators/errorHandler.mjs';
 import {
@@ -10,12 +10,13 @@ import {
     lowLevelStringValidations,
     midLevelStringValidations,
     highLevelStringValidations,
-    //lowLevelNumberValidations,
+    lowLevelNumberValidations,
     //mediumLevelNumberValidations,
-    //lowLevelArrayrValidations,
-    lowLevelSanitizer,
-    midLevelSanitizer,
-    highLevelSanitizer,
+    lowLevelArrayValidations,
+    lowLevelStringSanitizer,
+    midLevelStringSanitizer,
+    highLevelStringSanitizer,
+    byAttributeValidations
 
 } from '../validators/superheroesRules.mjs';
 
@@ -57,18 +58,22 @@ const router = express.Router();
 
 router.get('/heroes', obtenerTodosLosSuperheroesController);
 
+
 router.get('/heroes/id', obtenerTodosLosSuperheroesPorIdController);
 
+
 router.get('/heroes/id/:atributo/:valor',
-    lowLevelSanitizer(),
+    lowLevelStringSanitizer(),
     atributeParamsSanitizer(),
     validationHandler,
     buscarIdSuperheroesPorAtributoController)
 
+
 router.get('/heroes/mas-poderosos/', obtenerSuperheroesMasPoderososController);
 
+
 router.get('/heroes/mas-poderosos/:valor',
-    lowLevelSanitizer(),
+    lowLevelStringSanitizer(),
     lowLevelStringValidations(),
     validationHandler,
     obtenerSuperheroesMasPoderososPlanetaController);
@@ -79,7 +84,7 @@ router.get('/heroes/menos-poderosos/',
 
 
 router.get('/heroes/menos-poderosos/:valor',
-    lowLevelSanitizer(),
+    lowLevelStringSanitizer(),
     lowLevelStringValidations(),
     validationHandler,
     obtenerSuperheroesMenosPoderososPlanetaController);
@@ -90,22 +95,21 @@ router.get('/heroes/sin-poderes/',
 
 
 router.get('/heroes/sin-poderes/:valor',
-    lowLevelSanitizer(),
+    lowLevelStringSanitizer(),
     lowLevelStringValidations(),
     validationHandler,
     obtenerSuperheroesSinPoderesPlanetaController);
 
 
 router.get('/heroes/:atributo/:valor',
-    lowLevelSanitizer(),
     atributeParamsSanitizer(),
+    byAttributeValidations(),
     validationHandler,
-    buscarSuperheroesPorAtributoController)
-
+    buscarSuperheroesPorAtributoController);
 
 
 router.get('/heroes/:id',
-    lowLevelSanitizer(),
+    lowLevelStringSanitizer(),
     lowLevelStringValidations(),
     validationHandler,
     obtenerSuperheroePorIdController);

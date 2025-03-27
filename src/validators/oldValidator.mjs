@@ -73,6 +73,7 @@ export const nombresValidator = (atributo, valor) => {
         }
     };
     
+    
 export const numerosValidator = (atributo) => {
         check(atributo)
         .exists().withMessage(
@@ -99,7 +100,7 @@ export const numerosValidator = (atributo) => {
         }
 };
 
-/*
+
 export const nombresArrayValidator = (atributo) => {
         check(atributo)
         .exists().withMessage(
@@ -122,8 +123,8 @@ export const nombresArrayValidator = (atributo) => {
             //Si no hay errores, pasamos al siguiente middleWare
             nombresValidator(atributo)( req, res, next);
     }
-
 }
+
 
 export const numerosArrayValidator = (atributo) => {
     check(atributo)
@@ -148,6 +149,7 @@ export const numerosArrayValidator = (atributo) => {
             numerosValidator(atributo)( req, res, next);
     }
 }
+
 
 export const dinamicValidation = () => {
     check('atributo')
@@ -201,4 +203,4 @@ export const dinamicValidation = () => {
             }
             
         })
-}*/
+}
