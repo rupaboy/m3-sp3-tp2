@@ -19,24 +19,24 @@ export async function obtenerSuperheroesMasPoderosos() {
     return await SuperHeroRepository.obtenerMasPoderosos();
 }
 
-export async function obtenerSuperheroesMasPoderososPlaneta(planeta) {
-    return await SuperHeroRepository.obtenerMasPoderososPlaneta(planeta);
+export async function obtenerSuperheroesMasPoderososPlaneta(valor) {
+    return await SuperHeroRepository.obtenerMasPoderososPlaneta(valor);
 }
 
 export async function obtenerSuperheroesMenosPoderosos() {
     return await SuperHeroRepository.obtenerMenosPoderosos();
 }
 
-export async function obtenerSuperheroesMenosPoderososPlaneta(planeta) {
-    return await SuperHeroRepository.obtenerMenosPoderososPlaneta(planeta);
+export async function obtenerSuperheroesMenosPoderososPlaneta(valor) {
+    return await SuperHeroRepository.obtenerMenosPoderososPlaneta(valor);
 }
 
 export async function obtenerSuperheroesSinPoderes() {
     return await SuperHeroRepository.obtenerSinPoderes();
 }
 
-export async function obtenerSuperheroesSinPoderesPlaneta(planeta) {
-    return await SuperHeroRepository.obtenerSinPoderesPlaneta(planeta);
+export async function obtenerSuperheroesSinPoderesPlaneta(valor) {
+    return await SuperHeroRepository.obtenerSinPoderesPlaneta(valor);
 }
 
 export async function agregarNuevoSuperheroe() {
@@ -51,36 +51,70 @@ export async function agregarNuevoArraySuperheroes() {
     return await SuperHeroRepository.agregarNuevoArray();
 }
 
+// PUT
+
 export async function editarSuperheroePorId(id) {
     return await SuperHeroRepository.editar(id);
 }
 
-export async function editarSuperheroePorIdAtributoValor(id, atributo, valor) {
-    return await SuperHeroRepository.editarPorIdAtributoValor(id, atributo, valor)
+export async function editarSuperheroePorIdAtributoValor(id, valor) {
+    return await SuperHeroRepository.editarPorIdAtributoValor(id, valor)
 }
 
-export async function editarSuperheroePorIdAgregarPoder(id, poder) {
-    return await SuperHeroRepository.editarPorIdAgregarPoder(id, poder)
+export async function editarNombreSuperheroePorId(id, valor) {
+    return await SuperHeroRepository.editarNombrePorId(id, valor)
 }
 
-export async function editarSuperheroePorIdQuitarPoder(id, poder) {
-    return await SuperHeroRepository.editarPorIdQuitarPoder(id, poder)
+export async function editarNombreRealSuperheroePorId(id, valor) {
+    return await SuperHeroRepository.editarNombreRealPorId(id, valor)
 }
 
-export async function editarSuperheroePorIdAgregarAliado(id, aliado) {
-    return await SuperHeroRepository.editarPorIdAgregarAliado(id, aliado)
+export async function editarEdadSuperheroePorId(id, valor) {
+    return await SuperHeroRepository.editarEdadPorId(id, valor)
 }
 
-export async function editarSuperheroePorIdQuitarAliado(id, aliado) {
-    return await SuperHeroRepository.editarPorIdQuitarAliado(id, aliado)
+export async function editarPlanetaOrigenSuperheroePorId(id, valor) {
+    return await SuperHeroRepository.editarPlanetaOrigenPorId(id, valor)
 }
 
-export async function editarSuperheroePorIdAgregarEnemigo(id, enemigo) {
-    return await SuperHeroRepository.editarPorIdAgregarEnemigo(id, enemigo)
+export async function editarDebilidadSuperheroePorId(id, valor) {
+    return await SuperHeroRepository.editarDebilidadPorId(id, valor)
 }
 
-export async function editarSuperheroePorIdQuitarEnemigo(id, enemigo) {
-    return await SuperHeroRepository.editarPorIdQuitarEnemigo(id, enemigo)
+export async function editarPoderesSuperheroePorId(id, valor) {
+    return await SuperHeroRepository.editarPoderesPorId(id, valor)
+}
+
+export async function editarAliadosSuperheroePorId(id, valor) {
+    return await SuperHeroRepository.editarAliadosPorId(id, valor)
+}
+
+export async function editarEnemigosSuperheroePorId(id, valor) {
+    return await SuperHeroRepository.editarEnemigosPorId(id, valor)
+}
+
+export async function editarSuperheroePorIdAgregarPoder(id, valor) {
+    return await SuperHeroRepository.editarPorIdAgregarPoder(id, valor)
+}
+
+export async function editarSuperheroePorIdQuitarPoder(id, valor) {
+    return await SuperHeroRepository.editarPorIdQuitarPoder(id, valor)
+}
+
+export async function editarSuperheroePorIdAgregarAliado(id, valor) {
+    return await SuperHeroRepository.editarPorIdAgregarAliado(id, valor)
+}
+
+export async function editarSuperheroePorIdQuitarAliado(id, valor) {
+    return await SuperHeroRepository.editarPorIdQuitarAliado(id, valor)
+}
+
+export async function editarSuperheroePorIdAgregarEnemigo(id, valor) {
+    return await SuperHeroRepository.editarPorIdAgregarEnemigo(id, valor)
+}
+
+export async function editarSuperheroePorIdQuitarEnemigo(id, valor) {
+    return await SuperHeroRepository.editarPorIdQuitarEnemigo(id, valor)
 }
 
 export async function borrarSuperheroePorId(id) {
@@ -88,6 +122,6 @@ export async function borrarSuperheroePorId(id) {
 }
 
 
-export async function borrarSuperheroePorNombre(nombreSuperheroe) {
-    return await SuperHeroRepository.borrarPorNombre(nombreSuperheroe); 
+export async function borrarSuperheroePorNombre(valor) {
+    return await SuperHeroRepository.borrarPorNombre(valor); 
 }

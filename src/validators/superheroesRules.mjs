@@ -1,61 +1,6 @@
 import {param, body} from 'express-validator'
 
 
-// ATRIBUTO __________________________________________________ SANITIZER
-export const atributeParamsSanitizer = () => [
-    
-    param('atributo')
-    .customSanitizer(atributo => {
-
-        const atributoLowCase = atributo.toLowerCase();
-        
-        switch (atributoLowCase) {
-            case 'nombresuperheroe': return 'nombreSuperHeroe'
-            case 'nombrereal': return 'nombreReal' 
-            case 'planetaorigen': return 'planetaOrigen' 
-            default: return atributo
-        };
-    })
-];
-
-export const byAttributeValidations = () => [
-
-    param('valor')
-    .customSanitizer(atributo => {
-
-        const atributoLowCase = atributo.toLowerCase();
-        
-        switch (atributoLowCase) {
-
-            case 'nombresuperheroe':
-            case 'nombrereal':
-            case 'planetaorigen':
-            case 'debilidad' : {
-                highLevelStringSanitizer();
-                lowLevelStringValidations();
-                midLevelStringValidations();
-                break;
-            }
-
-            case 'edad': {
-                lowLevelNumberValidations();
-                break;
-            }
-
-            case 'poderes':
-            case 'aliados':
-            case 'enemigos': { 
-                lowLevelArrayValidations()
-                break;
-            }
-
-            default: return atributo
-
-        };
-    })
-];    
-
-
 
 // STRING __________________________________________________ SANITIZER
 export const lowLevelStringSanitizer = () => [
@@ -154,6 +99,13 @@ export const midLevelStringValidations = () => [
     // 2/1 (''-) / (--') MAX
 
     param('valor')
+    .exists().withMessage(
+        `El nombre es obligatorio.`)
+    .notEmpty().withMessage(
+        `El nombre no puede expresarse como una cadena vacía de texto.`) //OK
+    .trim()
+    .isLength({min: 3, max: 60}).withMessage(
+        `El nombre debe tener entre 3 y 60 caractéres`) //OK
     .matches(/^[a-zA-ZáéíóúÁÉÍÓÚñÑ0-9' -]+$/).withMessage(
         `Sólo se permiten letras, números, espacios, apóstrofes (') y guiones medios (-) en el nombre.`) //OK
     .matches(/^(?!.*['-].*['-].*['-].*['-]).*$/).withMessage(
@@ -165,7 +117,20 @@ export const midLevelStringValidations = () => [
 export const highLevelStringValidations = () => [
     
     param('valor')
-    
+
+    .exists().withMessage(
+        `El nombre es obligatorio.`)
+    .notEmpty().withMessage(
+        `El nombre no puede expresarse como una cadena vacía de texto.`) //OK
+    .trim()
+    .isLength({min: 3, max: 60}).withMessage(
+        `El nombre debe tener entre 3 y 60 caractéres`) //OK
+    .matches(/^[a-zA-ZáéíóúÁÉÍÓÚñÑ0-9' -]+$/).withMessage(
+        `Sólo se permiten letras, números, espacios, apóstrofes (') y guiones medios (-) en el nombre.`) //OK
+    .matches(/^(?!.*['-].*['-].*['-].*['-]).*$/).withMessage(
+        `El nombre no puede contener más de dos apóstrofes (') y un guion (-), o viceversa.`) //OK`
+    .matches(/^([^-']).*[^-']$/).withMessage( 
+        `El nombre no puede comenzar ni terminar con apóstrofes (') o guiones medios (-).`) //OK
     //Sólo admite caractéres alfabéticos
     //Sólo admite minúsculas
 
@@ -216,3 +181,61 @@ export const lowLevelArrayValidations = () => {
             } return true;
         })
     }
+
+
+//MISC ______________________________________________________ 'ATRIBUTO'
+
+
+export const attributeParamsSanitizer = () => [
+    
+    param('atributo')
+    .customSanitizer(atributo => {
+
+        const atributoLowCase = atributo.toLowerCase();
+        
+        switch (atributoLowCase) {
+            case 'nombresuperheroe': return 'nombreSuperHeroe'
+            case 'nombrereal': return 'nombreReal' 
+            case 'planetaorigen': return 'planetaOrigen' 
+            default: return atributo
+        };
+    })
+];
+
+export const byAttributeValidations = () => [
+
+    param('valor')
+    .customSanitizer(atributo => {
+
+        const atributoLowCase = atributo.toLowerCase();
+        
+        switch (atributoLowCase) {
+
+            case 'nombresuperheroe':
+            case 'nombrereal':
+            case 'planetaorigen':
+            case 'debilidad' : {
+                highLevelStringSanitizer();
+                lowLevelStringValidations();
+                midLevelStringValidations();
+                break;
+            }
+
+            case 'edad': {
+                lowLevelNumberValidations();
+                break;
+            }
+
+            case 'poderes':
+            case 'aliados':
+            case 'enemigos': { 
+                lowLevelArrayValidations()
+                break;
+            }
+
+            default: return atributo
+
+        };
+    })
+];    
+

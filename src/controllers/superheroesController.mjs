@@ -15,6 +15,16 @@ import {
     agregarNuevoTemplateSuperheroe,
     agregarNuevoArraySuperheroes,
     editarSuperheroePorId,
+    //
+    editarNombreSuperheroePorId,
+    editarNombreRealSuperheroePorId,
+    editarEdadSuperheroePorId,
+    editarPlanetaOrigenSuperheroePorId,
+    editarDebilidadSuperheroePorId,
+    editarPoderesSuperheroePorId,
+    editarAliadosSuperheroePorId,
+    editarEnemigosSuperheroePorId,
+    //
     editarSuperheroePorIdAtributoValor,
     editarSuperheroePorIdAgregarPoder,
     editarSuperheroePorIdQuitarPoder,
@@ -24,6 +34,7 @@ import {
     editarSuperheroePorIdQuitarEnemigo,
     borrarSuperheroePorId,
     borrarSuperheroePorNombre,
+    
 
 
     } from '../services/superheroesService.mjs';
@@ -265,6 +276,8 @@ export async function agregarNuevoArraySuperheroesController(req, res) {
     }
 }
 
+//METODOS PUT
+
 export async function editarSuperheroePorIdController(req, res) {
     try {
         const {id} = req.params;
@@ -299,10 +312,146 @@ export async function editarSuperheroePorIdAtributoValorController(req, res) {
     }
 }
 
+export async function editarNombreSuperheroePorIdController(req, res) {
+    try {
+        const {id, valor} = req.params;
+        const superheroe = await editarNombreSuperheroePorId(id, poder);
+        if (superheroe.length === 0) {
+            return res.status(404).send(
+                { mensaje: 'No se encontró un superhéroe para editar su nombre' });
+        }
+
+        const superheroeFormateado = renderizarSuperheroe(superheroe);
+        res.status(200).json(superheroeFormateado);
+    } catch (error) {
+        res.status(500).send({ mensaje: 'Error al buscar un superhéroe para editar su nombre',
+            error: error.message });
+    }
+}
+
+export async function editarNombreRealSuperheroePorIdController(req, res) {
+    try {
+        const {id, valor} = req.params;
+        const superheroe = await editarNombreRealSuperheroePorId(id, valor);
+        if (superheroe.length === 0) {
+            return res.status(404).send(
+                { mensaje: 'No se encontró un superhéroe para editar su nombre Real' });
+        }
+
+        const superheroeFormateado = renderizarSuperheroe(superheroe);
+        res.status(200).json(superheroeFormateado);
+    } catch (error) {
+        res.status(500).send({ mensaje: 'Error al buscar un superhéroe para editar su nombre Real',
+            error: error.message });
+    }
+}
+
+export async function editarEdadSuperheroePorIdController(req, res) {
+    try {
+        const {id, valor} = req.params;
+        const superheroe = await editarEdadSuperheroePorId(id, valor);
+        if (superheroe.length === 0) {
+            return res.status(404).send(
+                { mensaje: 'No se encontró un superhéroe para editar su edad' });
+        }
+
+        const superheroeFormateado = renderizarSuperheroe(superheroe);
+        res.status(200).json(superheroeFormateado);
+    } catch (error) {
+        res.status(500).send({ mensaje: 'Error al buscar un superhéroe para editar su edad',
+            error: error.message });
+    }
+}
+
+export async function editarPlanetaOrigenSuperheroePorIdController(req, res) {
+    try {
+        const {id, valor} = req.params;
+        const superheroe = await editarPlanetaOrigenSuperheroePorId(id, valor);
+        if (superheroe.length === 0) {
+            return res.status(404).send(
+                { mensaje: 'No se encontró un superhéroe para editar su planeta de orígen' });
+        }
+
+        const superheroeFormateado = renderizarSuperheroe(superheroe);
+        res.status(200).json(superheroeFormateado);
+    } catch (error) {
+        res.status(500).send({ mensaje: 'Error al buscar un superhéroe para editar su planeta de orígen',
+            error: error.message });
+    }
+}
+
+export async function editarDebilidadSuperheroePorIdController(req, res) {
+    try {
+        const {id, valor} = req.params;
+        const superheroe = await editarDebilidadSuperheroePorId(id, valor);
+        if (superheroe.length === 0) {
+            return res.status(404).send(
+                { mensaje: 'No se encontró un superhéroe para editar su debilidad' });
+        }
+
+        const superheroeFormateado = renderizarSuperheroe(superheroe);
+        res.status(200).json(superheroeFormateado);
+    } catch (error) {
+        res.status(500).send({ mensaje: 'Error al buscar un superhéroe para editar su debilidad',
+            error: error.message });
+    }
+}
+
+export async function editarPoderesSuperheroePorIdController(req, res) {
+    try {
+        const {id, valor} = req.params; //TRABAJAR CON ARRAYS
+        const superheroe = await editarPoderesSuperheroePorId(id, valor);
+        if (superheroe.length === 0) {
+            return res.status(404).send(
+                { mensaje: 'No se encontró un superhéroe para editar sus poderes' });
+        }
+
+        const superheroeFormateado = renderizarSuperheroe(superheroe);
+        res.status(200).json(superheroeFormateado);
+    } catch (error) {
+        res.status(500).send({ mensaje: 'Error al buscar un superhéroe para editar sus poderes',
+            error: error.message });
+    }
+}
+
+export async function editarAliadosSuperheroePorIdController(req, res) {
+    try {
+        const {id, valor} = req.params; //TRABAJAR CON ARRAYS
+        const superheroe = await editarAliadosSuperheroePorId(id, valor);
+        if (superheroe.length === 0) {
+            return res.status(404).send(
+                { mensaje: 'No se encontró un superhéroe para editar sus aliados' });
+        }
+
+        const superheroeFormateado = renderizarSuperheroe(superheroe);
+        res.status(200).json(superheroeFormateado);
+    } catch (error) {
+        res.status(500).send({ mensaje: 'Error al buscar un superhéroe para editar sus aliados',
+            error: error.message });
+    }
+}
+
+export async function editarEnemigosSuperheroePorIdController(req, res) {
+    try {
+        const {id, valor} = req.params; //TRABAJAR CON ARRAYS
+        const superheroe = await editarEnemigosSuperheroePorId(id, valor);
+        if (superheroe.length === 0) {
+            return res.status(404).send(
+                { mensaje: 'No se encontró un superhéroe para editar sus enemigos' });
+        }
+
+        const superheroeFormateado = renderizarSuperheroe(superheroe);
+        res.status(200).json(superheroeFormateado);
+    } catch (error) {
+        res.status(500).send({ mensaje: 'Error al buscar un superhéroe para editar sus enemigos',
+            error: error.message });
+    }
+}
+//
 export async function editarSuperheroePorIdAgregarPoderController(req, res) {
     try {
-        const {id, poder} = req.params;
-        const superheroe = await editarSuperheroePorIdAgregarPoder(id, poder);
+        const {id, valor} = req.params;
+        const superheroe = await editarSuperheroePorIdAgregarPoder(id, valor);
         if (superheroe.length === 0) {
             return res.status(404).send(
                 { mensaje: 'No se encontró un superhéroe para agregarle un poder' });
@@ -318,8 +467,8 @@ export async function editarSuperheroePorIdAgregarPoderController(req, res) {
 
 export async function editarSuperheroePorIdQuitarPoderController(req, res) {
     try {
-        const {id, poder} = req.params;
-        const superheroe = await editarSuperheroePorIdQuitarPoder(id, poder);
+        const {id, valor} = req.params;
+        const superheroe = await editarSuperheroePorIdQuitarPoder(id, valor);
         if (superheroe.length === 0) {
             return res.status(404).send(
                 { mensaje: 'No se encontró un superhéroe para quitarle un poder' });
@@ -335,8 +484,8 @@ export async function editarSuperheroePorIdQuitarPoderController(req, res) {
 
 export async function editarSuperheroePorIdAgregarAliadoController(req, res) {
     try {
-        const {id, aliado} = req.params;
-        const superheroe = await editarSuperheroePorIdAgregarAliado(id, aliado);
+        const {id, valor} = req.params;
+        const superheroe = await editarSuperheroePorIdAgregarAliado(id, valor);
         if (superheroe.length === 0) {
             return res.status(404).send(
                 { mensaje: 'No se encontró un superhéroe para agregarle un aliado' });
@@ -352,8 +501,8 @@ export async function editarSuperheroePorIdAgregarAliadoController(req, res) {
 
 export async function editarSuperheroePorIdQuitarAliadoController(req, res) {
     try {
-        const {id, aliado} = req.params;
-        const superheroe = await editarSuperheroePorIdQuitarAliado(id, aliado);
+        const {id, valor} = req.params;
+        const superheroe = await editarSuperheroePorIdQuitarAliado(id, valor);
         if (superheroe.length === 0) {
             return res.status(404).send(
                 { mensaje: 'No se encontró un superhéroe para quitarle un aliado' });
@@ -369,8 +518,8 @@ export async function editarSuperheroePorIdQuitarAliadoController(req, res) {
 
 export async function editarSuperheroePorIdAgregarEnemigoController(req, res) {
     try {
-        const {id, enemigo} = req.params;
-        const superheroe = await editarSuperheroePorIdAgregarEnemigo(id, enemigo);
+        const {id, valor} = req.params;
+        const superheroe = await editarSuperheroePorIdAgregarEnemigo(id, valor);
         if (superheroe.length === 0) {
             return res.status(404).send(
                 { mensaje: 'No se encontró un superhéroe para agregarle un enemigo' });
@@ -386,8 +535,8 @@ export async function editarSuperheroePorIdAgregarEnemigoController(req, res) {
 
 export async function editarSuperheroePorIdQuitarEnemigoController(req, res) {
     try {
-        const {id, enemigo} = req.params;
-        const superheroe = await editarSuperheroePorIdQuitarEnemigo(id, enemigo);
+        const {id, valor} = req.params;
+        const superheroe = await editarSuperheroePorIdQuitarEnemigo(id, valor);
         if (superheroe.length === 0) {
             return res.status(404).send(
                 { mensaje: 'No se encontró un superhéroe para quitarle un enemigo' });
@@ -423,8 +572,8 @@ export async function borrarSuperheroePorIdController(req, res) {
 
 export async function borrarSuperheroePorNombreController(req, res) {
     try {
-        const {nombre} = req.params;
-        const superheroeBorradoPorNombre = await borrarSuperheroePorNombre(nombre);
+        const {valor} = req.params;
+        const superheroeBorradoPorNombre = await borrarSuperheroePorNombre(valor);
         if (superheroeBorradoPorNombre.length === 0) {
             return res.status(404).send(
                 { mensaje: 'No se encontró el nombre del superhéroe a borrar' });

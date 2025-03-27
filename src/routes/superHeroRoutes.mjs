@@ -6,7 +6,7 @@ import express from 'express';
 import { validationResult } from 'express-validator';
 import { validationHandler } from '../validators/errorHandler.mjs';
 import {
-    atributeParamsSanitizer,
+    attributeParamsSanitizer,
     lowLevelStringValidations,
     midLevelStringValidations,
     highLevelStringValidations,
@@ -37,6 +37,14 @@ import {
     agregarNuevoTemplateSuperheroeController,
     agregarNuevoArraySuperheroesController,
     editarSuperheroePorIdAtributoValorController,
+    editarNombreSuperheroePorIdController,
+    editarNombreRealSuperheroePorIdController,
+    editarEdadSuperheroePorIdController,
+    editarPlanetaOrigenSuperheroePorIdController,
+    editarDebilidadSuperheroePorIdController,
+    editarPoderesSuperheroePorIdController,
+    editarAliadoSuperheroePorIdController,
+    editarEnemigoSuperheroePorIdController,
     editarSuperheroePorIdAgregarPoderController,
     editarSuperheroePorIdQuitarPoderController,
     editarSuperheroePorIdAgregarAliadoController,
@@ -64,7 +72,8 @@ router.get('/heroes/id', obtenerTodosLosSuperheroesPorIdController);
 
 router.get('/heroes/id/:atributo/:valor',
     lowLevelStringSanitizer(),
-    atributeParamsSanitizer(),
+    attributeParamsSanitizer(),
+    lowLevelStringValidations(),
     validationHandler,
     buscarIdSuperheroesPorAtributoController)
 
@@ -102,7 +111,7 @@ router.get('/heroes/sin-poderes/:valor',
 
 
 router.get('/heroes/:atributo/:valor',
-    atributeParamsSanitizer(),
+    attributeParamsSanitizer(),
     byAttributeValidations(),
     validationHandler,
     buscarSuperheroesPorAtributoController);
@@ -130,51 +139,98 @@ router.post('/heroes/nuevo/array',[
 
 
 //PUT
+//
+//router.put('heroes/:id/:atributo/:valor', (req, res) => {
+//    const { id, atributo, valor } = req.params
+////        putValorValidation(id, atributo, valor),
+//        editarSuperheroePorIdAtributoValorController})
+//
+router.put('/heroes/:id/nombreSuperHeroe/:valor',
+    highLevelStringSanitizer(),
+    midLevelStringValidations(),
+    validationHandler,
+    editarNombreSuperheroePorIdController);
 
-router.put('heroes/:id/:atributo/:valor', (req, res) => {
-    const { id, atributo, valor } = req.params
-//        putValorValidation(id, atributo, valor),
-        editarSuperheroePorIdAtributoValorController})
+router.put('/heroes/:id/nombreReal/:valor',
+    highLevelStringSanitizer(),
+    midLevelStringValidations(),
+    validationHandler,
+    editarNombreRealSuperheroePorIdController);
+
+router.put('/heroes/:id/edad/:valor',
+    lowLevelNumberValidations(),
+    validationHandler,
+    editarEdadSuperheroePorIdController);
+
+router.put('/heroes/:id/planetaOrigen/:valor',
+    highLevelStringSanitizer(),
+    midLevelStringValidations(),
+    validationHandler,
+    editarPlanetaOrigenSuperheroePorIdController);
+
+router.put('/heroes/:id/debilidad/:valor',
+    highLevelStringSanitizer(),
+    midLevelStringValidations(),
+    validationHandler,
+    editarDebilidadSuperheroePorIdController);
+
+router.put('heroes/:id/poderes/:valor',
+    lowLevelArrayValidations(),
+    validationHandler(),
+    editarPoderesSuperheroePorIdController);
+
+router.put('heroes/:id/aliados/:valor',
+    lowLevelArrayValidations(),
+    validationHandler(),
+    editarAliadosSuperheroePorIdController);
+
+router.put('heroes/:id/enemigos/:valor',
+    lowLevelArrayValidations(),
+    validationHandler(),
+    editarEnemigosSuperheroePorIdController);
+
+router.put('/heroes/:id/agregar/poder/:valor',
+    highLevelStringSanitizer(),
+    midLevelStringValidations(),
+    validationHandler,
+    editarSuperheroePorIdAgregarPoderController);
+
+router.put('/heroes/:id/quitar/poder/:valor',
+    lowLevelStringSanitizer(),
+    lowLevelStringValidations(),
+    validationHandler,
+    editarSuperheroePorIdQuitarPoderController)
 
 
-router.put('/heroes/:id/agregar/poder/:poder', (req, res) => {
-    const { id , poder } = req.params 
-    //Validar parámetros ''
-        lowLevelStringValidations(id, poder),
-        editarSuperheroePorIdAgregarPoderController})
+router.put('/heroes/:id/agregar/aliado/:valor',
+    highLevelStringSanitizer(),
+    midLevelStringValidations(),
+    validationHandler,
+    editarSuperheroePorIdAgregarAliadoController)
 
 
-router.put('/heroes/:id/quitar/poder/:poder',[
-//Validar parámetros ''
-//param('')    
-], editarSuperheroePorIdQuitarPoderController)
+router.put('/heroes/:id/quitar/aliado/:valor',
+    lowLevelStringSanitizer(),
+    lowLevelStringValidations(),
+    validationHandler,
+    editarSuperheroePorIdQuitarAliadoController)
 
 
-router.put('/heroes/:id/agregar/aliado/:aliado',[
-//Validar parámetros ''
-//param('')    
-], editarSuperheroePorIdAgregarAliadoController)
+router.put('/heroes/:id/agregar/enemigo/:valor',
+    highLevelStringSanitizer(),
+    midLevelStringValidations(),
+    validationHandler,
+    editarSuperheroePorIdAgregarEnemigoController)
 
 
-router.put('/heroes/:id/quitar/aliado/:aliado',[
-//Validar parámetros ''
-//param('')    
-], editarSuperheroePorIdQuitarAliadoController)
+router.put('/heroes/:id/quitar/enemigo/:valor',
+    lowLevelStringSanitizer(),
+    lowLevelStringValidations(),
+    validationHandler,
+    editarSuperheroePorIdQuitarEnemigoController)
 
 
-router.put('/heroes/:id/agregar/enemigo/:enemigo',[
-//Validar parámetros ''
-//param('')    
-], editarSuperheroePorIdAgregarEnemigoController)
-
-
-router.put('/heroes/:id/quitar/enemigo/:enemigo',[
-//Validar parámetros ''
-//param('')    
-], editarSuperheroePorIdQuitarEnemigoController)
-
-
-//router.put('/heroes/editar/:id',[
+//router.put('/heroes/editar/:id'
 //Validar parámetros ''
 //// param('')// ], editarSuperheroePorIdController) //..Pasa un id para editar. Deprecated.
 
@@ -182,15 +238,11 @@ router.put('/heroes/:id/quitar/enemigo/:enemigo',[
 
 //DELETE
 
-router.delete('/heroes/borrar/id/:id',[
-//Validar parámetros ''
-//param('')    
-], borrarSuperheroePorIdController)
+router.delete('/heroes/borrar/id/:id',
+borrarSuperheroePorIdController)
 
 
-router.delete('/heroes/borrar/nombre/:nombre',[
-//Validar parámetros ''
-//param('')    
-], borrarSuperheroePorNombreController)
+router.delete('/heroes/borrar/nombre/:valor',
+borrarSuperheroePorNombreController)
 
 export default router;
