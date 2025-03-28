@@ -159,7 +159,7 @@ export async function obtenerSuperheroesMasPoderososPlanetaController(req, res) 
 export async function obtenerSuperheroesMenosPoderososController(req, res) {
     try {
         const superheroes = await obtenerSuperheroesMenosPoderosos();
-        console.log(superheroes)
+        
         if (superheroes.length === 0) {
             return res.status(404).send(
                 { mensaje: 'No se encontró a los superhéroes menos poderosos' });
@@ -399,7 +399,7 @@ export async function editarDebilidadSuperheroePorIdController(req, res) {
 
 export async function editarPoderesSuperheroePorIdController(req, res) {
     try {
-        const {id, valor} = req.params; //TRABAJAR CON ARRAYS
+        const {id, valor} = req.params;
         const superheroe = await editarPoderesSuperheroePorId(id, valor);
         if (superheroe.length === 0) {
             return res.status(404).send(
@@ -416,7 +416,7 @@ export async function editarPoderesSuperheroePorIdController(req, res) {
 
 export async function editarAliadosSuperheroePorIdController(req, res) {
     try {
-        const {id, valor} = req.params; //TRABAJAR CON ARRAYS
+        const {id, valor} = req.params;
         const superheroe = await editarAliadosSuperheroePorId(id, valor);
         if (superheroe.length === 0) {
             return res.status(404).send(
@@ -433,7 +433,7 @@ export async function editarAliadosSuperheroePorIdController(req, res) {
 
 export async function editarEnemigosSuperheroePorIdController(req, res) {
     try {
-        const {id, valor} = req.params; //TRABAJAR CON ARRAYS
+        const {id, valor} = req.params;
         const superheroe = await editarEnemigosSuperheroePorId(id, valor);
         if (superheroe.length === 0) {
             return res.status(404).send(

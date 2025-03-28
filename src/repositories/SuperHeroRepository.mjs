@@ -44,9 +44,9 @@ class SuperHeroRepository extends IRepository {
     }
 
     
-    async obtenerMasPoderososPlaneta( planeta ) { 
+    async obtenerMasPoderososPlaneta( valor ) { 
         
-        const planetaLowCase = planeta.toLowerCase();
+        const planetaLowCase = valor.toLowerCase();
         const planetaRegEx = new RegExp(planetaLowCase, 'i');
         const consultaRegEx = {
             edad: { $gt: 20 },
@@ -70,9 +70,9 @@ class SuperHeroRepository extends IRepository {
     }
     
     
-    async obtenerMenosPoderososPlaneta( planeta ) { 
+    async obtenerMenosPoderososPlaneta( valor ) { 
         
-        const planetaLowCase = planeta.toLowerCase();
+        const planetaLowCase = valor.toLowerCase();
         const planetaRegEx = new RegExp(planetaLowCase, 'i');
         const consultaRegEx = {
             edad: { $lt: 110 }, //Si son más longevos no apareceran aquí.
@@ -96,9 +96,9 @@ class SuperHeroRepository extends IRepository {
 
     
     
-    async obtenerSinPoderesPlaneta( planeta ) { 
+    async obtenerSinPoderesPlaneta( valor ) { 
 
-        const planetaLowCase = planeta.toLowerCase();
+        const planetaLowCase = valor.toLowerCase();
         const planetaRegEx = new RegExp(planetaLowCase, 'i');
         const consultaRegEx = {
             planetaOrigen: { $regex: planetaRegEx },
@@ -217,23 +217,19 @@ class SuperHeroRepository extends IRepository {
     }
 
     async editarAliadosPorId(id, valor) { //Testing, devuelve 'after'.
-
-        const nuevoVector = valor.split(",");
-        
+       
         return await SuperHero.findOneAndUpdate(
             { _id: id},
-            { $set: { aliados: nuevoVector } }, // Reemplaza el array completo
+            { $set: { aliados: valor } }, // Reemplaza el array completo
             { returnDocument: 'after' }
         );
     }
 
     async editarEnemigosPorId(id, valor) { //Testing, devuelve 'after'.
         
-        const nuevoVector = valor.split(",");
-        
         return await SuperHero.findOneAndUpdate(
             { _id: id},
-            { $set: { enemigos: nuevoVector } }, // Reemplaza el array completo
+            { $set: { enemigos: valor } }, // Reemplaza el array completo
             { returnDocument: 'after' }
         );
     }    

@@ -59,10 +59,10 @@ export const highLevelStringSanitizer = () => [
         });
 
         return nuevaFrase.join('')
-            .replace(/\s*-\s*/g, '-')
-            .replace(/\s+/g, ' ')
-            .replace(/-+/g, '-')
-            .replace(/'+/g, "'")
+            .replace(/\s*-\s*/g, '-') //"Hola - mundo", se transformará en "Hola-mundo"
+            .replace(/\s+/g, ' ') //Elimina repeticiones de espacios.
+            .replace(/-+/g, '-') //Elimina repeticiones de guiones medios.
+            .replace(/'+/g, "'") ////Elimina repeticiones de apóstrofes.
                 .replace(/['\s]*-\s*['\s]*/g, '-')  // Elimina los apóstrofes y espacios alrededor del guion
                 .replace(/[-'](.)/g, (match, p1) => match[0] + p1.toUpperCase())  // Pone en mayúscula la letra después del guion
                 .replace(/^([a-z])/g, (match, p1) => p1.toUpperCase()); // Convierte la primera letra de la frase a mayúscula
@@ -166,6 +166,55 @@ export const lowLevelNumberValidations = () => [
 
 // ARRAY __________________________________________________ SANITIZER
 
+export const lowLevelArraySanitizer = () => [
+    
+    param('valor')
+    .customSanitizer(value => {
+
+        const originalString = value.toLowerCase() //Todo a minúsculas.
+        const sanitizedString = originalString
+        
+            .replace(/\s*-\s*/g, '-') // Elimina espacios alrededor de los guiones medios
+            .replace(/\s+/g, ' ') // Elimina repeticion de espacios
+            .replace(/-+/g, '-') // Elimina repeticion de guiones medios
+            .replace(/'+/g, "'") // Elimina repeticion de apóstrofes
+        
+            const stringsNuevaFrase = sanitizedString.split(/,\s*/) //Convierte en array separando por comas.
+
+        stringsNuevaFrase.forEach((frase)=>{
+            const nuevaFrase = frase.charAt(0).toUpperCase() + frase.slice(1); //Que cada string empiece con mayus
+        })
+
+        return stringsNuevaFrase
+    })
+];
+
+
+
+export const midLevelArraySanitizer = () => [
+    
+    param('valor')
+    .customSanitizer(value => {
+
+        const originalString = value.toLowerCase() //Todo a minúsculas.
+        const sanitizedString = originalString
+            .replace(/['\s]*-\s*['\s]*/g, '-') // Elimina los apóstrofes y espacios alrededor del guion
+            .replace(/\s*-\s*/g, '-') //"Hola - mundo", se transformará en "Hola-mundo"
+            .replace(/\s+/g, ' ') //Elimina repeticiones de espacios.
+            .replace(/-+/g, '-') //Elimina repeticiones de guiones medios.
+            .replace(/'+/g, "'") //Elimina repeticiones de apóstrofes.
+            .replace(/[-'](.)/g, (match, p1) => match[0] + p1.toUpperCase())  // Pone en mayúscula la letra después del guion
+        const stringsNuevaFrase = sanitizedString.split(/,\s*/)
+
+        stringsNuevaFrase.forEach(()=>{
+            const nuevaFrase = palabra.charAt(0).toUpperCase() + palabra.slice(1); //Que empiece con mayus
+        })
+
+        return stringsNuevaFrase
+    })
+];
+
+
 export const highLevelArraySanitizer = () => [
     
     param('valor')
@@ -176,7 +225,7 @@ export const highLevelArraySanitizer = () => [
         
         const originalString = value.toLowerCase() //Todo a minúsculas.
         const sanitizedString = originalString
-            .replace(/['\s]*-\s*['\s]*/g, '-')  // Elimina los apóstrofes y espacios alrededor del guion
+            .replace(/['\s]*-\s*['\s]*/g, '-') // Elimina los apóstrofes y espacios alrededor del guion
             .replace(/\s*-\s*/g, '-') //"Hola - mundo", se transformará en "Hola-mundo"
             .replace(/\s+/g, ' ') //Elimina repeticiones de espacios.
             .replace(/-+/g, '-') //Elimina repeticiones de guiones medios.
@@ -186,22 +235,22 @@ export const highLevelArraySanitizer = () => [
 
         let nuevoArray = []  //Reconstruye el String poniendo en mayúsculas la primera letra excepto articulos.
 
-        stringsNuevaFrase.forEach((frase) => {
+        stringsNuevaFrase.forEach((frase) => { //Por cada frase del array
             const nuevaFrase = []
-            const palabras = frase.split(/([ ']+)/)
+            const palabras = frase.split(/([ ']+)/) //Separar palabras
             palabras.forEach((palabra, index) => {
                 if (index === 0 || !articulos.has(palabra)) {
-                    const nuevaPalabra = palabra.charAt(0).toUpperCase() + palabra.slice(1); //Que sea mayus
+                    const nuevaPalabra = palabra.charAt(0).toUpperCase() + palabra.slice(1); //Si no es artículo, que sea mayus
                     nuevaFrase.push(nuevaPalabra)
                 } else {
-                nuevaFrase.push(palabra) //que sea minus
+                nuevaFrase.push(palabra) //Si es artículo, que siga en minus
                 }
             })
-            nuevoArray.push(nuevaFrase.join(''))
+            nuevoArray.push(nuevaFrase.join('')) //Volver a armar las frases
         
         })
-        console.log(nuevoArray)
-        return nuevoArray
+        
+        return nuevoArray //Devuelve Array sanitizado
     })
 ];
 
