@@ -209,11 +209,9 @@ class SuperHeroRepository extends IRepository {
 
     async editarPoderesPorId(id, valor) { //Testing, devuelve 'after'.
         
-        const nuevoVector = valor.split(",");
-        
         return await SuperHero.findOneAndUpdate(
             { _id: id},
-            { $set: { poderes: nuevoVector } }, // Reemplaza el array completo
+            { $set: { poderes: valor } }, // Reemplaza el array completo
             { returnDocument: 'after' }
         );
     }

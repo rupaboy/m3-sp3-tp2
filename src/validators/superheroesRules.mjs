@@ -45,11 +45,11 @@ export const highLevelStringSanitizer = () => [
 
         const articulos = new Set([ 'de', 'del', 'el', 'la', 'los', 'las', 'un', 'una', 'unos', 'unas', 'al', 'a', 'ante', 'bajo', 'con', 'contra', 'desde', 'en', 'entre', 'hacia', 'hasta', 'para', 'por', 'según', 'sobre', 'tras', 'y', 'o', 'ni', 'que', 'pero', 'aunque', 'porque', 'pues', 'como', 'cuando', 'donde', 'mientras', 'aunque' ]);
 
-        const palabrasSeparadas = palabras.split(/([ ']+)/)
+        const palabras = value.split(/([ ']+)/)
 
         let nuevaFrase = []  //Reconstruye el String poniendo en mayúsculas la primera letra excepto articulos.
 
-            palabrasSeparadas.forEach((palabra, index) => {
+            palabras.forEach((palabra, index) => {
                 if (index === 0 || !articulos.has(palabra)) {
                     const nuevaPalabra = palabra.charAt(0).toUpperCase() + palabra.slice(1); //Que sea mayus
                     nuevaFrase.push(nuevaPalabra)
@@ -147,27 +147,69 @@ export const highLevelStringValidations = () => [
 
 // NUMBER __________________________________________________ VALIDATION
 
-export const lowLevelNumberValidations = () => {
+export const lowLevelNumberValidations = () => [
     param('valor')
     .exists().withMessage(
         `El número es obligatorio.`)
     .trim()
+
     .notEmpty().withMessage(
         `El número no puede expresarse como un valor vacío.`)
 
-    .isLength({min: 3, max: 60}).withMessage(
-        `El número debe tener entre 3 y 60 caractéres`)
+    .isNumeric().withMessage(
+        `El valor debe expresarse con números.`)
         
-    .isFloat({ min: 0 }).withMessage(
-        `El número debe ser mayor o igual a 0.`
-)
-};
+    .custom(value => parseFloat(value) >= 0).withMessage(
+        'El número debe ser mayor o igual a 0.')
+];
+
+
+// ARRAY __________________________________________________ SANITIZER
+
+export const highLevelArraySanitizer = () => [
+    
+    param('valor')
+    .customSanitizer(value => {
+
+        //Palabras que estarán en minúsculas
+        const articulos = new Set([ 'de', 'del', 'el', 'la', 'los', 'las', 'un', 'una', 'unos', 'unas', 'al', 'a', 'ante', 'bajo', 'con', 'contra', 'desde', 'en', 'entre', 'hacia', 'hasta', 'para', 'por', 'según', 'sobre', 'tras', 'y', 'o', 'ni', 'que', 'pero', 'aunque', 'porque', 'pues', 'como', 'cuando', 'donde', 'mientras', 'aunque' ]);
+        
+        const originalString = value.toLowerCase() //Todo a minúsculas.
+        const sanitizedString = originalString
+            .replace(/['\s]*-\s*['\s]*/g, '-')  // Elimina los apóstrofes y espacios alrededor del guion
+            .replace(/\s*-\s*/g, '-') //"Hola - mundo", se transformará en "Hola-mundo"
+            .replace(/\s+/g, ' ') //Elimina repeticiones de espacios.
+            .replace(/-+/g, '-') //Elimina repeticiones de guiones medios.
+            .replace(/'+/g, "'") //Elimina repeticiones de apóstrofes.
+            .replace(/[-'](.)/g, (match, p1) => match[0] + p1.toUpperCase())  // Pone en mayúscula la letra después del guion
+        const stringsNuevaFrase = sanitizedString.split(/,\s*/)
+
+        let nuevoArray = []  //Reconstruye el String poniendo en mayúsculas la primera letra excepto articulos.
+
+        stringsNuevaFrase.forEach((frase) => {
+            const nuevaFrase = []
+            const palabras = frase.split(/([ ']+)/)
+            palabras.forEach((palabra, index) => {
+                if (index === 0 || !articulos.has(palabra)) {
+                    const nuevaPalabra = palabra.charAt(0).toUpperCase() + palabra.slice(1); //Que sea mayus
+                    nuevaFrase.push(nuevaPalabra)
+                } else {
+                nuevaFrase.push(palabra) //que sea minus
+                }
+            })
+            nuevoArray.push(nuevaFrase.join(''))
+        
+        })
+        console.log(nuevoArray)
+        return nuevoArray
+    })
+];
 
 
 //ARRAY _____________________________________________________ VALIDATION
 
 
-export const lowLevelArrayValidations = () => {
+export const lowLevelArrayValidations = () => [
         param('valor')
         .exists().withMessage(
             `El vector es obligatorio.`)
@@ -180,7 +222,7 @@ export const lowLevelArrayValidations = () => {
                 throw new Error(`Todos los elementos del vector. deben ser cadenas de texto.`)
             } return true;
         })
-    }
+]
 
 
 //MISC ______________________________________________________ 'ATRIBUTO'

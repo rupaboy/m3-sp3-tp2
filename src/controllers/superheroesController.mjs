@@ -315,7 +315,7 @@ export async function editarSuperheroePorIdAtributoValorController(req, res) {
 export async function editarNombreSuperheroePorIdController(req, res) {
     try {
         const {id, valor} = req.params;
-        const superheroe = await editarNombreSuperheroePorId(id, poder);
+        const superheroe = await editarNombreSuperheroePorId(id, valor);
         if (superheroe.length === 0) {
             return res.status(404).send(
                 { mensaje: 'No se encontró un superhéroe para editar su nombre' });

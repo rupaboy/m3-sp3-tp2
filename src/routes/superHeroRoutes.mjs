@@ -6,7 +6,6 @@ import express from 'express';
 import { validationResult } from 'express-validator';
 import { validationHandler } from '../validators/errorHandler.mjs';
 import {
-    attributeParamsSanitizer,
     lowLevelStringValidations,
     midLevelStringValidations,
     highLevelStringValidations,
@@ -16,6 +15,9 @@ import {
     lowLevelStringSanitizer,
     midLevelStringSanitizer,
     highLevelStringSanitizer,
+    //lowLevelArraySanitizer,
+    highLevelArraySanitizer,
+    attributeParamsSanitizer,
     byAttributeValidations
 
 } from '../validators/superheroesRules.mjs';
@@ -43,8 +45,8 @@ import {
     editarPlanetaOrigenSuperheroePorIdController,
     editarDebilidadSuperheroePorIdController,
     editarPoderesSuperheroePorIdController,
-    editarAliadoSuperheroePorIdController,
-    editarEnemigoSuperheroePorIdController,
+    editarAliadosSuperheroePorIdController,
+    editarEnemigosSuperheroePorIdController,
     editarSuperheroePorIdAgregarPoderController,
     editarSuperheroePorIdQuitarPoderController,
     editarSuperheroePorIdAgregarAliadoController,
@@ -174,19 +176,20 @@ router.put('/heroes/:id/debilidad/:valor',
     validationHandler,
     editarDebilidadSuperheroePorIdController);
 
-router.put('heroes/:id/poderes/:valor',
+router.put('/heroes/:id/poderes/:valor',
+    highLevelArraySanitizer(),
     lowLevelArrayValidations(),
-    validationHandler(),
+    validationHandler,
     editarPoderesSuperheroePorIdController);
 
-router.put('heroes/:id/aliados/:valor',
+router.put('/heroes/:id/aliados/:valor',
     lowLevelArrayValidations(),
-    validationHandler(),
+    validationHandler,
     editarAliadosSuperheroePorIdController);
 
-router.put('heroes/:id/enemigos/:valor',
+router.put('/heroes/:id/enemigos/:valor',
     lowLevelArrayValidations(),
-    validationHandler(),
+    validationHandler,
     editarEnemigosSuperheroePorIdController);
 
 router.put('/heroes/:id/agregar/poder/:valor',
