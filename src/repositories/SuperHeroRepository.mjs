@@ -110,21 +110,21 @@ class SuperHeroRepository extends IRepository {
 
     
     
-    async agregarNuevo(newHero) {  //Función genérica para uso futuro.
+    async agregarNuevo(nombreSuperHeroe, nombreReal, edad, planetaOrigen, debilidad, poderes, aliados, enemigos, creador) {
         const hero = new SuperHero(
             {
-                nombreSuperHeroe: newHero.nombreSuperHeroe,
-                nombreReal: newHero.nombreReal,
-                edad: newHero.edad,
-                planetaOrigen: newHero.planetaOrigen,
-                debilidad: newHero.debilidad,
-                poderes: newHero.poderes,
-                aliados: newHero.aliados,
-                enemigos: newHero.enemigos,
-                creador: newHero.creador
+                nombreSuperHeroe: nombreSuperHeroe,
+                nombreReal: nombreReal,
+                edad: edad,
+                planetaOrigen: planetaOrigen,
+                debilidad: debilidad,
+                poderes: poderes,
+                aliados: aliados,
+                enemigos: enemigos,
+                creador: creador
             }
         );
-        console.log(hero)
+        //console.log(hero)
         return await hero.save();
     }
 
@@ -132,7 +132,7 @@ class SuperHeroRepository extends IRepository {
     async agregarNuevoTemplate() { 
         
         const hero = new SuperHero(templateHeroeNuevo);
-        console.log(hero)
+        //console.log(hero)
         return await hero.save();
     }
     
@@ -145,7 +145,7 @@ class SuperHeroRepository extends IRepository {
             const heroeNuevo = await hero.save(); //Guarda cada héroe
             superheroesCreados.push(heroeNuevo); //Agrega al array original
             }
-            console.log('Todos los heroes han sido añadidos')
+            //console.log('Todos los heroes han sido añadidos')
             return superheroesCreados
         }
        
@@ -159,7 +159,7 @@ class SuperHeroRepository extends IRepository {
         );
     }   
     
-    async editarPorIdAtributoValor(id, atributo, valor) { //Testing, devuelve 'after'.
+    async editarPorIdAtributoValor(id, atributo, valor) { 
         return await SuperHero.findOneAndUpdate(
             { _id: id },
             { $set: { [atributo]: valor } },
@@ -167,7 +167,7 @@ class SuperHeroRepository extends IRepository {
         );
     }
 
-    async editarNombrePorId(id, valor) { //Testing, devuelve 'after'.
+    async editarNombrePorId(id, valor) { 
         return await SuperHero.findOneAndUpdate(
             { _id: id },
             { $set: { nombreSuperHeroe: valor } },
@@ -175,7 +175,7 @@ class SuperHeroRepository extends IRepository {
         );
     }
 
-    async editarNombreRealPorId(id, valor) { //Testing, devuelve 'after'.
+    async editarNombreRealPorId(id, valor) { 
         return await SuperHero.findOneAndUpdate(
             { _id: id },
             { $set: { nombreReal: valor } },
@@ -183,7 +183,7 @@ class SuperHeroRepository extends IRepository {
         );
     }
 
-    async editarEdadPorId(id, valor) { //Testing, devuelve 'after'.
+    async editarEdadPorId(id, valor) { 
         return await SuperHero.findOneAndUpdate(
             { _id: id },
             { $set: { edad: valor } },
@@ -191,7 +191,7 @@ class SuperHeroRepository extends IRepository {
         );
     }
 
-    async editarPlanetaOrigenPorId(id, valor) { //Testing, devuelve 'after'.
+    async editarPlanetaOrigenPorId(id, valor) { 
         return await SuperHero.findOneAndUpdate(
             { _id: id },
             { $set: { planetaOrigen: valor } },
@@ -199,7 +199,7 @@ class SuperHeroRepository extends IRepository {
         );
     }
 
-    async editarDebilidadPorId(id, valor) { //Testing, devuelve 'after'.
+    async editarDebilidadPorId(id, valor) { 
         return await SuperHero.findOneAndUpdate(
             { _id: id },
             { $set: { debilidad: valor } },
@@ -207,7 +207,7 @@ class SuperHeroRepository extends IRepository {
         );
     }
 
-    async editarPoderesPorId(id, valor) { //Testing, devuelve 'after'.
+    async editarPoderesPorId(id, valor) { 
         
         return await SuperHero.findOneAndUpdate(
             { _id: id},
@@ -216,7 +216,7 @@ class SuperHeroRepository extends IRepository {
         );
     }
 
-    async editarAliadosPorId(id, valor) { //Testing, devuelve 'after'.
+    async editarAliadosPorId(id, valor) { 
        
         return await SuperHero.findOneAndUpdate(
             { _id: id},
@@ -225,7 +225,7 @@ class SuperHeroRepository extends IRepository {
         );
     }
 
-    async editarEnemigosPorId(id, valor) { //Testing, devuelve 'after'.
+    async editarEnemigosPorId(id, valor) { 
         
         return await SuperHero.findOneAndUpdate(
             { _id: id},
@@ -234,7 +234,7 @@ class SuperHeroRepository extends IRepository {
         );
     }    
     
-    async editarPorIdAgregarPoder(id, valor) { //Testing, devuelve 'after'.
+    async editarPorIdAgregarPoder(id, valor) { 
         return await SuperHero.findOneAndUpdate(
             { _id: id },
             { $push: { poderes: valor } },
@@ -244,7 +244,7 @@ class SuperHeroRepository extends IRepository {
 
     
     
-    async editarPorIdAgregarAliado(id, valor) { //Testing, devuelve 'after'.
+    async editarPorIdAgregarAliado(id, valor) { 
         return await SuperHero.findOneAndUpdate(
             { _id: id },
             { $push: { aliados: valor } },
@@ -254,7 +254,7 @@ class SuperHeroRepository extends IRepository {
     
     
     
-    async editarPorIdAgregarEnemigo(id, valor) { //Testing, devuelve 'after'.
+    async editarPorIdAgregarEnemigo(id, valor) { 
         return await SuperHero.findOneAndUpdate(
             { _id: id },
             { $push: { enemigos: valor } },
@@ -263,41 +263,57 @@ class SuperHeroRepository extends IRepository {
     }
 
     
-    async editarPorIdQuitarPoder(id, valor) { //Testing, devuelve 'after'.
+    async editarPorIdQuitarPoder(id, valor) {         
+
+        const poderLowCase = valor.toLowerCase();
+        const poderRegExp = new RegExp(poderLowCase, 'i');
+        
         return await SuperHero.findOneAndUpdate(
             { _id: id },
-            { $pull: { poderes: valor } },
+            { $pull: { poderes: poderRegExp } },
             { returnDocument: 'after' }
         );
     }
 
     
-    async editarPorIdQuitarAliado(id, valor) { //Testing, devuelve 'after'.
+    async editarPorIdQuitarAliado(id, valor) { 
+    
+        const aliadoLowCase = valor.toLowerCase();
+        const aliadoRegExp = new RegExp(aliadoLowCase, 'i');
+        
         return await SuperHero.findOneAndUpdate(
             { _id: id },
-            { $pull: { aliados: valor } },
+            { $pull: { aliados: aliadoRegExp } },
             { returnDocument: 'after' }
         );
     }
 
     
-    async editarPorIdQuitarEnemigo(id, valor) { //Testing, devuelve 'after'.
+    async editarPorIdQuitarEnemigo(id, valor) {
+       
+        const enemigoLowCase = valor.toLowerCase();
+        const enemigoRegExp = new RegExp(enemigoLowCase, 'i');
+        
         return await SuperHero.findOneAndUpdate(
             { _id: id },
-            { $pull: { enemigos: valor } },
+            { $pull: { enemigos: enemigoRegExp } },
             { returnDocument: 'after' }
         );
     }
 
     
-    async borrarPorId(id) { // Testing
+    async borrarPorId(id) {
         return await SuperHero.findByIdAndDelete(id)
     }
 
     
-    async borrarPorNombre(valor) { //Testing
+    async borrarPorNombre(valor) { 
+        
+        const nombreLowCase = valor.toLowerCase();
+        const nombreRegExp = new RegExp(nombreLowCase, 'i');
+
         return await SuperHero.findOneAndDelete(
-            { nombreSuperHeroe: valor }
+            { nombreSuperHeroe: nombreRegExp }
         )
     }
 

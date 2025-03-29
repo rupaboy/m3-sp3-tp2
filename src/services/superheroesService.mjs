@@ -39,8 +39,8 @@ export async function obtenerSuperheroesSinPoderesPlaneta(valor) {
     return await SuperHeroRepository.obtenerSinPoderesPlaneta(valor);
 }
 
-export async function agregarNuevoSuperheroe() {
-    return await SuperHeroRepository.agregarNuevo();
+export async function agregarNuevoSuperheroe(nombreSuperHeroe, nombreReal, edad, planetaOrigen, debilidad, poderes, aliados, enemigos, creador) {
+    return await SuperHeroRepository.agregarNuevo(nombreSuperHeroe, nombreReal, edad, planetaOrigen, debilidad, poderes, aliados, enemigos, creador)
 }
 
 export async function agregarNuevoTemplateSuperheroe() {

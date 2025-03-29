@@ -1,12 +1,15 @@
 import express from 'express';
 import { connectDB } from './config/dbConfig.mjs'
 import router from './routes/superHeroRoutes.mjs'
+import bodyParser from 'body-parser'
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 //Middleware para parsear JSON
 app.use(express.json());
+
+app.use(bodyParser.urlencoded({ extended: true }));
 
 //Conexión a MongoDB
 connectDB();

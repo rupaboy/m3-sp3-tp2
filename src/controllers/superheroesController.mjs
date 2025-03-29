@@ -226,8 +226,9 @@ export async function obtenerSuperheroesSinPoderesPlanetaController(req, res) {
 
 export async function agregarNuevoSuperheroeController(req, res) {
     try {
-        
-        const superheroeCreado = await agregarNuevoSuperheroe()
+        const {nombreSuperHeroe, nombreReal, edad, planetaOrigen, debilidad, poderes, aliados, enemigos, creador} = req.body
+        //console.log(nombreSuperHeroe, nombreReal, edad, planetaOrigen, debilidad, poderes, aliados, enemigos, creador)
+        const superheroeCreado = await agregarNuevoSuperheroe(nombreSuperHeroe, nombreReal, edad, planetaOrigen, debilidad, poderes, aliados, enemigos, creador)
         if (superheroeCreado.length === 0) {
             return res.status(404).send(
                 { mensaje: 'No se encontró un superhéroe creado' });
@@ -262,7 +263,7 @@ export async function agregarNuevoArraySuperheroesController(req, res) {
     try {
         
         const superheroesCreados = await agregarNuevoArraySuperheroes()
-        console.log(superheroesCreados.length)
+        //console.log(superheroesCreados.length)
         if (superheroesCreados.length === 0) {
             return res.status(404).send(
                 { mensaje: 'No se encontraron superhéroes creados por array.' });

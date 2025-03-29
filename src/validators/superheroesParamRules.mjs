@@ -1,9 +1,9 @@
-import {param, body} from 'express-validator'
+import {param} from 'express-validator'
 
 
 
 // STRING __________________________________________________ SANITIZER
-export const lowLevelStringSanitizer = () => [
+export const lowLevelParamStringSanitizer = () => [
     
     param('valor')
     .customSanitizer(value => {
@@ -19,7 +19,7 @@ export const lowLevelStringSanitizer = () => [
 ];
 
 
-export const midLevelStringSanitizer = () => [
+export const midLevelParamStringSanitizer = () => [
     
     param('valor')
     .customSanitizer(value => {
@@ -38,9 +38,13 @@ export const midLevelStringSanitizer = () => [
 ] 
 
 
-export const highLevelStringSanitizer = () => [
+export const highLevelParamStringSanitizer = () => [
     
     param('valor')
+
+    .matches(/^[a-zA-ZáéíóúÁÉÍÓÚñÑ0-9' -]+$/).withMessage(
+        `Sólo se permiten letras, números, espacios, apóstrofes (') y guiones medios (-).`) //OK
+
     .customSanitizer(value => {
 
         const articulos = new Set([ 'de', 'del', 'el', 'la', 'los', 'las', 'un', 'una', 'unos', 'unas', 'al', 'a', 'ante', 'bajo', 'con', 'contra', 'desde', 'en', 'entre', 'hacia', 'hasta', 'para', 'por', 'según', 'sobre', 'tras', 'y', 'o', 'ni', 'que', 'pero', 'aunque', 'porque', 'pues', 'como', 'cuando', 'donde', 'mientras', 'aunque' ]);
@@ -70,9 +74,8 @@ export const highLevelStringSanitizer = () => [
 ] 
 
 
-
 // STRING __________________________________________________ VALIDATION
-export const lowLevelStringValidations = () => [
+export const lowLevelParamStringValidations = () => [
 
     // ¡La string debe existir!
     // ¡La string no debe estar vacía!
@@ -81,17 +84,17 @@ export const lowLevelStringValidations = () => [
 
     param('valor')
     .exists().withMessage(
-        `El nombre es obligatorio.`)
-    .notEmpty().withMessage(
-        `El nombre no puede expresarse como una cadena vacía de texto.`) //OK
+        `El texto es obligatorio.`)
     .trim()
+    .notEmpty().withMessage(
+        `El texto no puede expresarse como una cadena vacía.`) //OK
     .isLength({min: 3, max: 60}).withMessage(
-        `El nombre debe tener entre 3 y 60 caractéres`) //OK
+        `El texto debe tener entre 3 y 60 caractéres`) //OK
 
 ]
 
 
-export const midLevelStringValidations = () => [
+export const midLevelParamStringValidations = () => [
     
     // Solo Letras, numeros y ( ) (-) (')
     // Al menos una mayus o num.
@@ -100,54 +103,41 @@ export const midLevelStringValidations = () => [
 
     param('valor')
     .exists().withMessage(
-        `El nombre es obligatorio.`)
-    .notEmpty().withMessage(
-        `El nombre no puede expresarse como una cadena vacía de texto.`) //OK
+        `El texto es obligatorio.`)
     .trim()
+    .notEmpty().withMessage(
+        `El texto no puede expresarse como una cadena vacía.`) //OK
     .isLength({min: 3, max: 60}).withMessage(
-        `El nombre debe tener entre 3 y 60 caractéres`) //OK
+        `El texto debe tener entre 3 y 60 caractéres`) //OK
     .matches(/^[a-zA-ZáéíóúÁÉÍÓÚñÑ0-9' -]+$/).withMessage(
-        `Sólo se permiten letras, números, espacios, apóstrofes (') y guiones medios (-) en el nombre.`) //OK
+        `Sólo se permiten letras, números, espacios, apóstrofes (') y guiones medios (-) en el texto.`) //OK
     .matches(/^(?!.*['-].*['-].*['-].*['-]).*$/).withMessage(
-        `El nombre no puede contener más de dos apóstrofes (') y un guion (-), o viceversa.`) //OK`
+        `El texto no puede contener más de dos apóstrofes (') y un guion (-), o viceversa.`) //OK`
     .matches(/^([^-']).*[^-']$/).withMessage( 
-        `El nombre no puede comenzar ni terminar con apóstrofes (') o guiones medios (-).`) //OK
+        `El texto no puede comenzar ni terminar con apóstrofes (') o guiones medios (-).`) //OK
 ]
 
-export const highLevelStringValidations = () => [
-    
-    param('valor')
 
+
+// MONGO ID ________________________________________________ VALIDATION
+
+export const mongoIdParamValidator = () => [
+
+    param('id')
     .exists().withMessage(
-        `El nombre es obligatorio.`)
-    .notEmpty().withMessage(
-        `El nombre no puede expresarse como una cadena vacía de texto.`) //OK
+        `El id es obligatorio.`)
     .trim()
-    .isLength({min: 3, max: 60}).withMessage(
-        `El nombre debe tener entre 3 y 60 caractéres`) //OK
-    .matches(/^[a-zA-ZáéíóúÁÉÍÓÚñÑ0-9' -]+$/).withMessage(
-        `Sólo se permiten letras, números, espacios, apóstrofes (') y guiones medios (-) en el nombre.`) //OK
-    .matches(/^(?!.*['-].*['-].*['-].*['-]).*$/).withMessage(
-        `El nombre no puede contener más de dos apóstrofes (') y un guion (-), o viceversa.`) //OK`
-    .matches(/^([^-']).*[^-']$/).withMessage( 
-        `El nombre no puede comenzar ni terminar con apóstrofes (') o guiones medios (-).`) //OK
-    //Sólo admite caractéres alfabéticos
-    //Sólo admite minúsculas
 
-    .isAlpha().withMessage(
-        `El nombre sólo admite caractéres alfabéticos`) //OK`
-    .custom((value) => {
-        if (value !== value.toLowerCase()) {
-          throw new Error(`El nombre solamente acepta letras minúsculas.`);
-        }
-        return true;
-      })
-]
+    .notEmpty().withMessage(
+        `El id no puede expresarse como un valor vacío.`)
 
+    .isMongoId().withMessage(
+        `El valor debe expresarse con una _id de MongoDB.`)
+];
 
 // NUMBER __________________________________________________ VALIDATION
 
-export const lowLevelNumberValidations = () => [
+export const lowLevelParamNumberValidations = () => [
     param('valor')
     .exists().withMessage(
         `El número es obligatorio.`)
@@ -166,7 +156,7 @@ export const lowLevelNumberValidations = () => [
 
 // ARRAY __________________________________________________ SANITIZER
 
-export const lowLevelArraySanitizer = () => [
+export const lowLevelParamArraySanitizer = () => [
     
     param('valor')
     .customSanitizer(value => {
@@ -191,7 +181,7 @@ export const lowLevelArraySanitizer = () => [
 
 
 
-export const midLevelArraySanitizer = () => [
+export const midLevelParamArraySanitizer = () => [
     
     param('valor')
     .customSanitizer(value => {
@@ -215,7 +205,7 @@ export const midLevelArraySanitizer = () => [
 ];
 
 
-export const highLevelArraySanitizer = () => [
+export const highLevelParamArraySanitizer = () => [
     
     param('valor')
     .customSanitizer(value => {
@@ -258,7 +248,7 @@ export const highLevelArraySanitizer = () => [
 //ARRAY _____________________________________________________ VALIDATION
 
 
-export const lowLevelArrayValidations = () => [
+export const lowLevelParamArrayValidations = () => [
         param('valor')
         .exists().withMessage(
             `El vector es obligatorio.`)
@@ -277,56 +267,58 @@ export const lowLevelArrayValidations = () => [
 //MISC ______________________________________________________ 'ATRIBUTO'
 
 
-export const attributeParamsSanitizer = () => [
+export const attributeParamSanitizer = () => [
     
     param('atributo')
-    .customSanitizer(atributo => {
+    .customSanitizer(value => {
 
-        const atributoLowCase = atributo.toLowerCase();
+        const valueLowCase = value.toLowerCase();
         
-        switch (atributoLowCase) {
+        switch (valueLowCase) {
             case 'nombresuperheroe': return 'nombreSuperHeroe'
             case 'nombrereal': return 'nombreReal' 
-            case 'planetaorigen': return 'planetaOrigen' 
-            default: return atributo
+            case 'planetaorigen': return 'planetaOrigen'
+            default: return valueLowCase
         };
     })
 ];
 
-export const byAttributeValidations = () => [
+export const byAttributeParamValidations = () => [
 
     param('valor')
-    .customSanitizer(atributo => {
+    .customSanitizer(value => {
 
-        const atributoLowCase = atributo.toLowerCase();
+
+        const valueLowCase = value.toLowerCase();
         
-        switch (atributoLowCase) {
+        switch (valueLowCase) {
 
             case 'nombresuperheroe':
             case 'nombrereal':
             case 'planetaorigen':
             case 'debilidad' : {
-                highLevelStringSanitizer();
-                lowLevelStringValidations();
-                midLevelStringValidations();
+                highLevelParamStringSanitizer();
+                lowLevelParamStringValidations();
+                midLevelParamStringValidations();
                 break;
             }
 
             case 'edad': {
-                lowLevelNumberValidations();
+                lowLevelParamNumberValidations();
                 break;
             }
 
             case 'poderes':
             case 'aliados':
             case 'enemigos': { 
-                lowLevelArrayValidations()
+                lowLevelParamArrayValidations()
                 break;
             }
 
-            default: return atributo
+            default: return value;
 
         };
     })
 ];    
+
 
